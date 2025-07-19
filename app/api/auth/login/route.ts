@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import type { User } from '@/types/User'
 import { logger } from '@/lib/logger'
-import { rateLimiter, getClientIP } from '@/lib/rateLimit'
+import { rateLimiter } from '@/lib/rateLimit'
 
 export async function POST(request: Request) {
     

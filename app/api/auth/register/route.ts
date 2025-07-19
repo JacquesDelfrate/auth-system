@@ -6,11 +6,10 @@ import { NextResponse } from 'next/server'
 import { sendVerificationEmail } from '@/lib/email'
 import { setVerificationToken } from '@/lib/auth'
 import { logger } from '@/lib/logger'
-import { rateLimiter, getClientIP } from '@/lib/rateLimit'
+import { rateLimiter } from '@/lib/rateLimit'
 
 
 export async function POST(request: Request) {
-    const clientIP = getClientIP(request)
     
     try {
         // Check rate limit for registration
