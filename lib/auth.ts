@@ -72,3 +72,26 @@ export async function setVerificationToken(user: User) {
         return NextResponse.json({ error: 'Error setting verification token' }, { status: 500 })
     }
 }
+
+export async function setPasswordResetToken(user: User) {
+    try {
+        const passwordResetToken = crypto.randomBytes(32).toString('hex')
+        const passwordResetTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+        
+        logger.authInfo('Setting password reset token for user', user.id, user.email)
+
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                resetPasswordToken: passwordResetToken,
+                resetPasswordTokenExpiry: passwordResetTokenExpiry
+            }
+        })
+        
+        logger.authInfo('Password reset token set successfully', user.id, user.email)
+        return passwordResetToken
+    } catch (error) {
+        logger.authError('Error setting password reset token', error as Error, user.id, user.email)
+        return NextResponse.json({ error: 'Error setting password reset token' }, { status: 500 })
+    }
+}
